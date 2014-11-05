@@ -21,10 +21,12 @@ import com.sk.util.FileUtil;
 
 public class CheckStockAction {
  
-	
+
+    //add wangjia
 	public static int checkResultSuccess =0;
 	public static int checkResultFail =0;
-	
+
+
 	 
 	
 	/**
