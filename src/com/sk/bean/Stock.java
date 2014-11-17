@@ -1,12 +1,18 @@
 package com.sk.bean;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Stock {
+public class Stock implements Serializable {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7727875465127847767L;
 
 	private String id;
 
@@ -17,6 +23,13 @@ public class Stock {
 	
 	private Map<String,Integer> dayStockIndexMap;
 
+	
+	public DayStock getDayStockByIndex(int index) {
+		if(index<0 || index>=dayStockList.size()){
+			return null;
+		}
+		return getDayStockList().get(index);
+	}
 
 	public String getId() {
 		return id;

@@ -1,26 +1,47 @@
 package com.sk.bean;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-public class DayStock {
+public class DayStock implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -255554101435612630L;
 	private String date;
 	private String id;
+	private int  index; //索引
 	private double openPrice;
 	private double closePrice;
 	private double maxPrice;
 	private double minPrice;
-	
+
+
 	private DayStockMa dayStockMa;
+	private DayStockIndex dayStockIndex;
+	private DayStockIndexMacd dayStockIndexMacd;
 
 	private double rise; 
 	private double openRise; 
 	
+	public double getLc(){
+		if(yesterdayStock!=null && yesterdayStock.getClosePrice()!=null && closePrice>0){
+			double d =  (closePrice-yesterdayStock.getClosePrice());
+			DecimalFormat df = new DecimalFormat(".00");
+			return Double.parseDouble( df.format(d) );
+		}
+		return 0;
+	}
+	
 	public double getRise(){
 		if(yesterdayStock!=null && yesterdayStock.getClosePrice()!=null && closePrice>0){
 			double d =  (closePrice-yesterdayStock.getClosePrice())/yesterdayStock.getClosePrice();
-			return d;
+			DecimalFormat df = new DecimalFormat(".0000");
+			rise =  Double.parseDouble( df.format(d) );
+			return rise;
 		}
 		return 0;
 	} 
@@ -33,23 +54,24 @@ public class DayStock {
 		return "";
 	} 
 	
+	public Double getRiseRateDouble(){
+		if(yesterdayStock!=null && yesterdayStock.getClosePrice()!=null && closePrice>0){
+			double d =  (100.0*(closePrice-yesterdayStock.getClosePrice()))/yesterdayStock.getClosePrice();
+			return d;
+		}
+		return 0d;
+	} 
 	
 	public double getOpenRise() { 
-		double d =  (closePrice-openPrice)/openPrice;
-		return d; 
+		openRise =  (closePrice-openPrice)/openPrice;
+		return openRise; 
 	}
 	
 	private Long vol;
 	private Long amount; 
 
-	private DayStock nextOneStock ;
-	private DayStock nextTwoStock ;
-	private DayStock nextThreeStock ;
-	private DayStock nextFourStock ;
-	private DayStock nextFiveStock ;
-
-	private DayStock yesterdayStock ;
-	private DayStock beforeYesterdayStock ;
+	private DayStock nextOneStock ; 
+	private DayStock yesterdayStock ; 
 	
 	 
 	
@@ -126,17 +148,17 @@ public class DayStock {
 	}
 	public void setYesterdayStock(DayStock yesterdayStock) {
 		this.yesterdayStock = yesterdayStock;
+	} 
+	
+	
+	public DayStockIndex getDayStockIndex() {
+		return dayStockIndex;
 	}
-	public DayStock getBeforeYesterdayStock() {
-		return beforeYesterdayStock;
+
+	public void setDayStockIndex(DayStockIndex dayStockIndex) {
+		this.dayStockIndex = dayStockIndex;
 	}
-	public void setBeforeYesterdayStock(DayStock beforeYesterdayStock) {
-		this.beforeYesterdayStock = beforeYesterdayStock;
-	}
-	
-	
-	
-	
+
 	public DayStock getNextOneStock() {
 		return nextOneStock;
 	}
@@ -144,37 +166,22 @@ public class DayStock {
 	public void setNextOneStock(DayStock nextOneStock) {
 		this.nextOneStock = nextOneStock;
 	}
-
-	public DayStock getNextTwoStock() {
-		return nextTwoStock;
+ 
+	public DayStockIndexMacd getDayStockIndexMacd() {
+		return dayStockIndexMacd;
 	}
 
-	public void setNextTwoStock(DayStock nextTwoStock) {
-		this.nextTwoStock = nextTwoStock;
+	public void setDayStockIndexMacd(DayStockIndexMacd dayStockIndexMacd) {
+		this.dayStockIndexMacd = dayStockIndexMacd;
 	}
 
-	public DayStock getNextThreeStock() {
-		return nextThreeStock;
+	
+	public int getIndex() {
+		return index;
 	}
 
-	public void setNextThreeStock(DayStock nextThreeStock) {
-		this.nextThreeStock = nextThreeStock;
-	}
-
-	public DayStock getNextFourStock() {
-		return nextFourStock;
-	}
-
-	public void setNextFourStock(DayStock nextFourStock) {
-		this.nextFourStock = nextFourStock;
-	}
-
-	public DayStock getNextFiveStock() {
-		return nextFiveStock;
-	}
-
-	public void setNextFiveStock(DayStock nextFiveStock) {
-		this.nextFiveStock = nextFiveStock;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	@Override

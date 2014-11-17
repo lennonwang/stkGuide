@@ -1,10 +1,14 @@
 package com.sk.bean;
 
-import java.util.Arrays;
-import java.util.Date;
+import java.io.Serializable;
 
-public class DayStockMa {
 
+public class DayStockMa implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8101933112318269772L;
 	private String date;
 	private String id; 
 	
