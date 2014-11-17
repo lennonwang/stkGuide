@@ -1,25 +1,14 @@
 package com.sk.action;
 
-import java.io.BufferedReader;
-import java.io.File; 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
 
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.time.DateUtils;
+import com.sk.util.MathUtil;
 
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
 import com.sk.config.Config;
 import com.sk.service.BuildStockService;
-import com.sk.service.CountStockMaService;
 import com.sk.service.DayStockService;
-import com.sk.service.MacdService;
-import com.sk.util.DateUtil;
-import com.sk.util.FileUtil;
 
 public class CheckStockAction {
  
@@ -50,12 +39,6 @@ public class CheckStockAction {
 						continue;
 					}
 					if(dayStock.getDayStockMa().getVolMa5()>dayStock.getYesterdayStock().getDayStockMa().getVolMa5()){
-					//	if(dayStock.getYesterdayStock().getVolMa5()>stock.getDayStockByIndex(dayStockIndex-2).getVolMa5()){
-					 //	System.out.println("checkStockVol:"+dayStock.toString()+"\t"+dayStock.getVol()
-					 //		+"\t"+dayStock.getVolMa5()+"\t"+dayStock.getVolMa10()); 
-							
-						//	System.out.println("昨天的五日成交量:"+dayStock.getYesterdayStock()+"\t"+dayStock.getYesterdayStock().getVolMa5()
-					//				+"\t 前天的五日成交量:"+stock.getDayStockByIndex(dayStockIndex-2)+"\t"+stock.getDayStockByIndex(dayStockIndex-2).getVolMa5()); 
 					
 							double d1= (double)  (dayStock.getDayStockMa().getVolMa5()*1000)/(dayStock.getYesterdayStock().getDayStockMa().getVolMa5()*1000.0);   
 							double d2= (double)  (dayStock.getYesterdayStock().getDayStockMa().getVolMa5()*1000)/(stock.getDayStockByIndex(dayStockIndex-2).getDayStockMa().getVolMa5()*1000.0);  
@@ -86,7 +69,6 @@ public class CheckStockAction {
 							
 							boolean dayMa60And20 = ( (dayStock.getClosePrice()>dayStock.getDayStockMa().getPriceMa60() )
 									&& ( dayStock.getClosePrice()*1.03>dayStock.getDayStockMa().getPriceMa20()));
-							// if(  ma20rise>ma20dapan  && ma60rise > ma60dapan && check5  && check6  &&   dayMa60And20  && check7)
 							if( check4 && ( check1 || check2 || check3 ) ) {
 								System.out.println("------------------------------------------");
 								System.out.println("check 当天:"+dayStock+"\t"+dayStock.getRiseRate() );  
@@ -101,72 +83,41 @@ public class CheckStockAction {
 								}
 								if(check3){
 									System.out.print("成交量暴涨；ma34:"+String.format("%.2f", mavol34)+"倍 ；五日均线今天是昨天的倍数："+String.format("%.2f", d1)+"\t");
-								} 
-								if(dayStock.getClosePrice() * 1.08 >dayStock.getDayStockMa().getPriceMa60() 
-										&& dayStock.getClosePrice() * 0.95 < dayStock.getDayStockMa().getPriceMa60() ){
-									System.out.print("60日均线附近："+ String.format("%.2f", ma60rise)+("%") +"\t");
-								}  else {
-									System.out.print("60日均线较远："+String.format("%.2f", ma60rise)+("%") +"\t");
-								} 
-								if(dayStock.getClosePrice() * 1.08 >dayStock.getDayStockMa().getPriceMa20() 
-										&& dayStock.getClosePrice() * 0.95 < dayStock.getDayStockMa().getPriceMa20() ){
-									System.out.print("20日均线附近："+ String.format("%.2f", ma20rise)+("%") +"\t");
-								}  else {
-									System.out.print("20日均线较远："+String.format("%.2f", ma20rise)+("%") +"\t");
 								}
-								System.out.println("success="+ check1+"\t"+check2 +"\t"+String.format("%.2f", d1) +"\t "+String.format("%.2f", d2) +"\t "+String.format("%.2f", d3)+"\t"+String.format("%.2f", d4) +"\t "+String.format("%.2f", d5));
-								System.out.println("checkStockVol:"+dayStock.toString()+"\t"+dayStock.getVol()
-									 	+"\t"+dayStock.getDayStockMa().getVolMa5()+"\t"+dayStock.getDayStockMa().getVolMa10());  
-								System.out.println("checkStockPrice:"+dayStock.toString()+"\t"+dayStock.getClosePrice()
-									 	+"\t"+dayStock.getDayStockMa().getPriceMa5()+"\t"+ String.format("%.2f", dayStock.getDayStockMa().getPriceMa60()));  
-							/*	
-							 System.out.println("昨天的五日成交量:"+dayStock.getYesterdayStock()+"\t"+dayStock.getYesterdayStock().getVolMa5()
-										 				+"\t 前天的五日成交量:"+stock.getDayStockByIndex(dayStockIndex-2)+"\t"+stock.getDayStockByIndex(dayStockIndex-2).getVolMa5()); 
-								System.out.println("昨天的十日成交量:"+dayStock.getYesterdayStock()+"\t"+dayStock.getYesterdayStock().getVolMa10()
-												 				+"\t 前天的十日成交量:"+stock.getDayStockByIndex(dayStockIndex-2)+"\t"+stock.getDayStockByIndex(dayStockIndex-2).getVolMa10());
-								*/
-								double checkresult5 = 0;
-								double checkresult2 = 0;
-								System.out.println();
-								System.out.println("前天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-2)));
-								System.out.println("昨天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-1)));
-								System.out.println("今天:"+DayStockService.getDayStockInfo(dayStock));
-									System.out.println("----");
-								if(dayStock.getNextOneStock()!=null){ 
-									System.out.println("后一天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+1)));
-									checkresult2 = checkresult2 + dayStock.getNextOneStock().getRise();
-									checkresult5 = checkresult5 + dayStock.getNextOneStock().getRise();
-								}
-								if(stock.getDayStockByIndex(dayStockIndex+2)!=null){ 
-									System.out.println("后二天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+2)));
-									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
-									checkresult2 = checkresult2 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
-								}
-								if(stock.getDayStockByIndex(dayStockIndex+3)!=null){ 
-									System.out.println("后三天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+3)));
-									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+3).getRise();
-								}
-								if(stock.getDayStockByIndex(dayStockIndex+4)!=null){ 
-									System.out.println("后四天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+4))); 
-									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+4).getRise();
-								}
-								if(stock.getDayStockByIndex(dayStockIndex+5)!=null){ 
-									System.out.println("后五天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+5))); 
-									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+5).getRise();
-								}
-								System.out.println("checkresult5="+checkresult5);
-                              
-                                    if(checkresult5*100>5 || checkresult2*100>3){
-                                        checkResultSuccess++;
-                                        System.out.println("成功 ");
-                                    } else {
-                                        checkResultFail++;
-                                        System.out.println("失败"+checkresult2*100);
-                                    }
-                                 
-								System.out.println("今天五日成交量/昨天的五日成交量="+String.format("%.2f", d1) +"\t 昨天五日成交量/前天的五日成交量="+String.format("%.2f", d2)); 
-								System.out.println("");
-								  m++;
+
+                                double checkresult5 = 0;
+                                double checkresult2 = 0;
+
+                                if(dayStock.getNextOneStock()!=null){
+                                    checkresult2 = checkresult2 + dayStock.getNextOneStock().getRise();
+                                    checkresult5 = checkresult5 + dayStock.getNextOneStock().getRise();
+                                }
+                                if(stock.getDayStockByIndex(dayStockIndex+2)!=null){
+                                    checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
+                                    checkresult2 = checkresult2 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
+                                }
+                                if(stock.getDayStockByIndex(dayStockIndex+3)!=null){
+                                    checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+3).getRise();
+                                }
+                                if(stock.getDayStockByIndex(dayStockIndex+4)!=null){
+                                    checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+4).getRise();
+                                }
+                                if(stock.getDayStockByIndex(dayStockIndex+5)!=null){
+                                    checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+5).getRise();
+                                }
+
+                                if(checkresult5*100>5 || checkresult2*100>3){
+                                    checkResultSuccess++;
+                                    DayStockService.getCheckInfo(stock,dayStock);
+                                    System.out.println("成功 2日" + MathUtil.format(checkresult2 * 100)+"%" +"\t 五日："+ MathUtil.format(checkresult5*100)+"%");
+                                } else {
+                                    checkResultFail++;
+                                    DayStockService.getCheckInfo(stock,dayStock);
+                                    System.out.println("失败 2日"+ MathUtil.format(checkresult2*100)+"%" +"\t 五日："+ MathUtil.format(checkresult5*100)+"%");
+                                }
+
+                                System.out.println("");
+                                m++;
 							}
 						}
 					}

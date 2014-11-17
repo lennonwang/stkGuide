@@ -1,26 +1,15 @@
 package com.sk.action;
 
-import java.io.BufferedReader;
-import java.io.File; 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.time.DateUtils;
+import com.sk.strategy.DiLiangStrategy;
 
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
 import com.sk.config.Config;
 import com.sk.service.BuildStockService;
-import com.sk.service.CountStockMaService;
 import com.sk.service.DayStockService;
-import com.sk.service.MacdService;
-import com.sk.service.RsiService;
-import com.sk.util.DateUtil;
-import com.sk.util.FileUtil;
 import com.sk.util.MathUtil;
 
 public class CheckIndexAction {
@@ -72,7 +61,7 @@ public class CheckIndexAction {
 							 boolean check1 = d1>1.10d && d1<1.40d && d2>1.00d && d2<1.40d && d3>1.00d && d1+0.05>=d2;
 							 boolean check2 =  (d1>1.05 && d1<1.80d && d2<0.97 && d2>0.7 && d3>1.00d ) ;
 							 boolean check3 = ((d1 >1.2 && d1<2.0d && d3>1.00d) );
-							 // ||(mavol34>1.05d && mavol34<2.5)
+
 							 boolean checkPrice120And250 = dayStock.getClosePrice()>dayStock.getDayStockMa().getPriceMa120() 
 										&& dayStock.getClosePrice()>dayStock.getDayStockMa().getPriceMa250();
 										
@@ -87,7 +76,7 @@ public class CheckIndexAction {
 							boolean dayMa60= dayStock.getClosePrice() * 1.1 >dayStock.getDayStockMa().getPriceMa60() 
 									&& dayStock.getClosePrice() * 0.9 < dayStock.getDayStockMa().getPriceMa60() ; 
 							
-							boolean isDiliang = CountStockMaService.isDiLiang(stock, dayStock);
+							boolean isDiliang = new DiLiangStrategy().isDiLiangVol(stock, dayStock);
 							// if(  ma20rise>ma20dapan  && ma60rise > ma60dapan && check5  && check6  &&   dayMa60And20  && check7)
 							 //	if(RsiService.checkRsi(dayStock) ) {
 							if(  checkVolM5 && ( check1 || check2 || check3 )   && DayStockService.checkRiseForVolBig(stock, dayStock) ) 	{
