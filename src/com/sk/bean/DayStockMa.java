@@ -23,11 +23,17 @@ public class DayStockMa implements Serializable{
 	private double priceMa30; 
 	private double priceMa60; 
 	private double priceMa120; 
-	private double priceMa250; 
+	private double priceMa250;
 
-	
-	
-	public String getDate() {
+
+
+
+    private double priceEma5;
+    private double priceEma7;
+    private double priceEma20;
+
+
+    public String getDate() {
 		return date;
 	}
 
@@ -170,8 +176,32 @@ public class DayStockMa implements Serializable{
 	}
 
 
+    public double getPriceEma5() {
+        return priceEma5;
+    }
 
-	@Override
+    public double getPriceEma7() {
+        return priceEma7;
+    }
+
+    public double getPriceEma20() {
+        return priceEma20;
+    }
+
+    public void setPriceEma5(double priceEma5) {
+        this.priceEma5 = priceEma5;
+    }
+
+    public void setPriceEma7(double priceEma7) {
+        this.priceEma7 = priceEma7;
+    }
+
+    public void setPriceEma20(double priceEma20) {
+        this.priceEma20 = priceEma20;
+    }
+
+
+    @Override
 	public String toString() {		
 		return "ma_"+id+"_"+date;
 	}

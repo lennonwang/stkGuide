@@ -97,7 +97,7 @@ public class CheckIndexAction {
 								}  
 						 
 								double checkresult5 = 0;
-								double checkresult2 = 0;
+                                double checkresult2 = 0;
 								
 								if(dayStock.getNextOneStock()!=null){ 
 									checkresult2 = checkresult2 + dayStock.getNextOneStock().getRise();

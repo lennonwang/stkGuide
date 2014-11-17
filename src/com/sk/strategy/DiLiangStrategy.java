@@ -14,12 +14,22 @@ import java.util.List;
  * User: lennon
  * Date: 14-11-17
  * Time: 上午11:41
- * To change this template use File | Settings | File Templates.
+ * 该策略：使用地量见地价的逻辑，通过扫描一段时间内成交量较低的几天，做为买入点。
+ * @todo 在辅助均线或者其他支撑线;
+ * @todo 考虑macd的指标协助
+ * 建议使用范围：验证周期在至少5天以上，建议10天左右；
  */
 public class DiLiangStrategy {
 
 
-
+    public   boolean conformDiLiangStrategy(Stock stock,DayStock dayStock){
+        boolean result = true;
+        boolean conformVol =  isDiLiangVol(stock,dayStock,30,2);
+        if(! conformVol){
+            result = false;
+        }
+        return    result;
+    }
 
     public   boolean isDiLiangVol(Stock stock,DayStock dayStock){
         return isDiLiangVol(stock,dayStock,30,2);

@@ -22,12 +22,13 @@ public class DayStockService {
 			System.out.println("后四天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+4))); 
 			System.out.println("后五天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+5))); 
 	}
+
 	public static String getDayStockInfo(DayStock dayStock){
 		String s ="";
 		if(dayStock!=null){
 			s = dayStock+"\t"+dayStock.getRiseRate();
 			if(dayStock.getDayStockIndex()!=null){
-				s = s + "\t rsi:"+dayStock.getDayStockIndex().getRsi6();
+				s = s + "\t rsi:"+dayStock.getDayStockIndex().getRsi6() ;
 			}
 			if(dayStock.getDayStockIndexMacd()!=null){
 				s = s + "\t diff="+dayStock.getDayStockIndexMacd().getMacdDiff()+",dea="+dayStock.getDayStockIndexMacd().getMacdDea()

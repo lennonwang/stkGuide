@@ -162,7 +162,7 @@ public class BuildStockService {
 	 
 	public static void initStock(Stock stock) { 
 		if(stock!=null && stock.getDayStockList()!=null) {  
-			BuildStockMaService.initStockMa(stock) ;
+			StockMaService.initStockMa(stock) ;
 			//初始化昨天和前天的，每天Stock情况
 			for(DayStock dayStock :stock.getDayStockList()) {
 				String dayDateString = dayStock.getDate();  

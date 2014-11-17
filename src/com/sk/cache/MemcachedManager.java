@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sk.config.Config;
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
  
@@ -28,7 +29,7 @@ public class MemcachedManager{
         if(c==null){  
             try {  
                 c=new MemcachedClient(  
-                        AddrUtil.getAddresses("127.0.0.1:11211"));  
+                        AddrUtil.getAddresses(Config.memcacheServerIp));
             } catch (IOException e) {  
                 // TODO Auto-generated catch block  
                 e.printStackTrace();  

@@ -113,8 +113,8 @@ public class MacdService {
 	
 	public static void countStockMacd(Stock stock,int shortNum,int longNum,int deaNum) { 
 		if(stock!=null && stock.getDayStockList()!=null) { 
-			Map<Integer,Double> shortEmaMap  = MaUtil.emaStockClose(stock, shortNum);
-			Map<Integer,Double> longNumEmaMap  = MaUtil.emaStockClose(stock, longNum);
+			Map<Integer,Double> shortEmaMap  = StockMaService.emaStockClose(stock, shortNum);
+			Map<Integer,Double> longNumEmaMap  = StockMaService.emaStockClose(stock, longNum);
 			
 			Map<Integer,DayStockIndexMacd> macdMap = new HashMap<Integer,DayStockIndexMacd>();  
 			List<Double> diffList  = new ArrayList<Double>();
