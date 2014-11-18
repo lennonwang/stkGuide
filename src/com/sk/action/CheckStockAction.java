@@ -35,7 +35,7 @@ public class CheckStockAction {
 				int dayStockIndex = dayStock.getIndex();
 				if(dayStock!=null&& stock.getDayStockByIndex(dayStockIndex-2)!=null&& dayStock.getYesterdayStock()!=null
 						&& dayStock.getYesterdayStock().getDayStockMa().getVolMa5()!=null && stock.getDayStockByIndex(dayStockIndex-2).getDayStockMa().getVolMa5()!=null){
-					if(!dayStock.getDate().startsWith("2014-11-11")){
+					if(!dayStock.getDate().startsWith("2014-11-17")){
 						continue;
 					}
 					if(dayStock.getDayStockMa().getVolMa5()>dayStock.getYesterdayStock().getDayStockMa().getVolMa5()){
@@ -69,7 +69,7 @@ public class CheckStockAction {
 							
 							boolean dayMa60And20 = ( (dayStock.getClosePrice()>dayStock.getDayStockMa().getPriceMa60() )
 									&& ( dayStock.getClosePrice()*1.03>dayStock.getDayStockMa().getPriceMa20()));
-							if( check4 && ( check1 || check2 || check3 ) ) {
+							if( check4 && ( check1 || check2 || check3 ) && check5 && check6) {
 								System.out.println("------------------------------------------");
 								System.out.println("check 当天:"+dayStock+"\t"+dayStock.getRiseRate() );  
 								System.out.println("大盘 当天:"+String.format("%.2f", ma20dapan)+("%") +"\t"+String.format("%.2f", ma20rise)+("%") +"\t 大盘60:"+String.format("%.2f", ma60dapan)+("%") +"\t"+String.format("%.2f", ma60rise)+("%")

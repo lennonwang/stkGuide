@@ -1,18 +1,17 @@
-package com.sk.action;
-
-import java.io.File;
-import java.util.Date;
-
-import com.sk.strategy.DiLiangStrategy;
+package com.sk.test;
 
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
 import com.sk.config.Config;
 import com.sk.service.BuildStockService;
 import com.sk.service.DayStockService;
+import com.sk.strategy.NewHighStrategy;
 import com.sk.util.MathUtil;
 
-public class CheckIndexAction {
+import java.io.File;
+import java.util.Date;
+
+public class TestNewHighStrategyAction {
  
 
     //add wangjia
@@ -20,17 +19,13 @@ public class CheckIndexAction {
 	public static int checkResultFail =0;
 
 
-    public static int dapan =2425;
-    public static int dapan20 =2365;
-    public static int dapan60 =2308;
-
 	 
 	
 	/**
 	 * 检查股票成交量
 	 * @param stock src/com/sk/bean/DayStockMa.java
 	 */
-	public static int checkStockVol(Stock stock) { 
+	public static int checkStrategy(Stock stock) {
 		int m=0;
 		
 		if(stock!=null && stock.getDayStockList()!=null) {
@@ -38,12 +33,12 @@ public class CheckIndexAction {
 				int dayStockIndex = dayStock.getIndex();
 				if(dayStock!=null&& stock.getDayStockByIndex(dayStockIndex-2)!=null&& dayStock.getYesterdayStock()!=null
 						&& dayStock.getYesterdayStock().getDayStockMa().getVolMa5()!=null && stock.getDayStockByIndex(dayStockIndex-2).getDayStockMa().getVolMa5()!=null){
-					if(!dayStock.getDate().startsWith("2014-11-13")){
+					if(!dayStock.getDate().startsWith("2014-11-14")){
 						continue;
 					}
 		
-			  		boolean isDiliang = new DiLiangStrategy().conformDiLiangStrategy(stock, dayStock);
-				 		if( isDiliang ) {
+			  		boolean isNewHigh = new NewHighStrategy().conformNewHighStrategy(stock, dayStock);
+				 		if( isNewHigh ) {
 							System.out.println("------------------------------------------");
 				  
 								double checkresult5 = 0;
@@ -89,16 +84,8 @@ public class CheckIndexAction {
 	}
 	public static void main(String[] args) {
 		Stock stock = null;
-			//	stock = ExportStock.exportStock("002066");
-		  // stock = ExportStock.exportStock("SH601801");
-		 //  stock = ExportStock.exportStock("SH600217");
-		//   stock = ExportStock.exportStock("300001");
-		//   checkStockVol(stock);
 		  stock = BuildStockService.exportStock("002721");
-		//	 checkStockVol(stock);
-			 if(1==1){
-			//	 return ;
-			 }
+
 		int m = 0;
 		int n = 0;
 		long ctime = new Date().getTime();
@@ -111,7 +98,7 @@ public class CheckIndexAction {
 		 
 			if (stock != null) {
 				m++;
-				int c = checkStockVol(stock);
+				int c = checkStrategy(stock);
 				 n = n+c;
 			} 
 			 
