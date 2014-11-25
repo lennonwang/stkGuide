@@ -35,7 +35,7 @@ public class CheckStockAction {
 				int dayStockIndex = dayStock.getIndex();
 				if(dayStock!=null&& stock.getDayStockByIndex(dayStockIndex-2)!=null&& dayStock.getYesterdayStock()!=null
 						&& dayStock.getYesterdayStock().getDayStockMa().getVolMa5()!=null && stock.getDayStockByIndex(dayStockIndex-2).getDayStockMa().getVolMa5()!=null){
-					if(!dayStock.getDate().startsWith("2014-11-17")){
+					if(!dayStock.getDate().startsWith("2014-11-24")){
 						continue;
 					}
 					if(dayStock.getDayStockMa().getVolMa5()>dayStock.getYesterdayStock().getDayStockMa().getVolMa5()){

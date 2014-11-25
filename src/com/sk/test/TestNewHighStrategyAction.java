@@ -22,22 +22,22 @@ public class TestNewHighStrategyAction {
 	 
 	
 	/**
-	 * 检查股票成交量
-	 * @param stock src/com/sk/bean/DayStockMa.java
+	 * 检查股票成交量 
 	 */
-	public static int checkStrategy(Stock stock) {
+	public static int checkStrategy(Stock stock,boolean checkAll) {
 		int m=0;
 		
 		if(stock!=null && stock.getDayStockList()!=null) {
 			for(DayStock dayStock :stock.getDayStockList()) {
 				int dayStockIndex = dayStock.getIndex();
-				if(dayStock!=null&& stock.getDayStockByIndex(dayStockIndex-2)!=null&& dayStock.getYesterdayStock()!=null
-						&& dayStock.getYesterdayStock().getDayStockMa().getVolMa5()!=null && stock.getDayStockByIndex(dayStockIndex-2).getDayStockMa().getVolMa5()!=null){
-					if(!dayStock.getDate().startsWith("2014-11-14")){
+			 	if(!dayStock.getDate().startsWith("2014-11-21")){
 						continue;
 					}
 		
 			  		boolean isNewHigh = new NewHighStrategy().conformNewHighStrategy(stock, dayStock);
+			  		if(checkAll){
+			  			isNewHigh = true;
+			  		}
 				 		if( isNewHigh ) {
 							System.out.println("------------------------------------------");
 				  
@@ -78,7 +78,7 @@ public class TestNewHighStrategyAction {
 						}
 					
 				
-			} 
+			 
 		}
 		return m;
 	}
@@ -92,16 +92,13 @@ public class TestNewHighStrategyAction {
 		File file = new File(Config.stockFilePath);
 		String test[];
 		test = file.list();
-		for (int i = 0; i < test.length; i++) {
-		
-			stock = BuildStockService.exportStock(test[i]);
-		 
+		for (int i = 0; i < test.length; i++) { 
+			stock = BuildStockService.exportStock(test[i]); 
 			if (stock != null) {
 				m++;
-				int c = checkStrategy(stock);
+				int c = checkStrategy(stock,false);
 				 n = n+c;
-			} 
-			 
+			}  
 		}
 		long ctime1 =  new Date().getTime();
 

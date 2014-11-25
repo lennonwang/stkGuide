@@ -132,6 +132,7 @@ public class BuildStockService {
 			stock.setDayStockMap(dayStockMap); 
 			initStock(stock);  
 			 c.set(mKey, EXPIRE_FOUR_HOUR, stock);
+
 		 //	writeBuffered(stock,cacheFileName);
 			return stock;
 		} catch (Exception e) { 

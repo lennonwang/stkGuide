@@ -16,11 +16,21 @@ public class DayStockService {
 			System.out.println("前一天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-1)));
 			System.out.println("今天:"+DayStockService.getDayStockInfo(dayStock));
 			System.out.println("----"); 
-			System.out.println("后一天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+1))); 
-			System.out.println("后二天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+2))); 
-			System.out.println("后三天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+3)));
-			System.out.println("后四天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+4))); 
-			System.out.println("后五天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+5))); 
+			if(stock.getDayStockByIndex(dayStockIndex+1)!=null){
+				System.out.println("后一天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+1))); 
+			}
+			if(stock.getDayStockByIndex(dayStockIndex+2)!=null){
+				System.out.println("后二天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+2))); 
+			}
+			if(stock.getDayStockByIndex(dayStockIndex+3)!=null){
+				System.out.println("后三天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+3)));
+			}
+			if(stock.getDayStockByIndex(dayStockIndex+4)!=null){
+				System.out.println("后四天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+4))); 
+			}
+			if(stock.getDayStockByIndex(dayStockIndex+5)!=null){
+				System.out.println("后五天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex+5))); 
+			}
 	}
 
 	public static String getDayStockInfo(DayStock dayStock){
@@ -57,6 +67,24 @@ public class DayStockService {
 		return false;
 	}
 	
+	public static boolean isLimitUp(DayStock dayStock){ 
+		if(  dayStock.getRise()>0.096    ){ 
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param dayStock
+	 * @return
+	 */
+	public static boolean isBigRedStock(DayStock dayStock){ 
+		if(  dayStock!=null && dayStock.getRise()>0.070    ){ 
+			return true;
+		}
+		return false;
+	}
 	
 	public static boolean checkRiseForVolBig(Stock stock,DayStock dayStock){   
 		DayStock preStock = dayStock.getYesterdayStock();  
