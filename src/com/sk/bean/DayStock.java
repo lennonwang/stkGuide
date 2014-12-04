@@ -62,6 +62,15 @@ public class DayStock implements Serializable {
 		return 0d;
 	} 
 	
+	public Double getMaxRiseRateDouble(){
+		if(yesterdayStock!=null && yesterdayStock.getClosePrice()!=null && closePrice>0){
+			double d =  (100.0*(maxPrice-yesterdayStock.getClosePrice()))/yesterdayStock.getClosePrice();
+			return d;
+		}
+		return 0d;
+	} 
+	
+	
 	public double getOpenRise() { 
 		openRise =  (closePrice-openPrice)/openPrice;
 		return openRise; 

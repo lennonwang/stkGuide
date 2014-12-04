@@ -3,6 +3,7 @@ package com.sk.test;
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
 import com.sk.config.Config;
+import com.sk.service.BollService;
 import com.sk.service.BuildStockService;
 import com.sk.service.DayStockService;
 import com.sk.strategy.LimitUpThreeDayStrategy;
@@ -12,7 +13,7 @@ import com.sk.util.MathUtil;
 import java.io.File;
 import java.util.Date;
 
-public class TestLimitUpAction {
+public class TestBollAction {
  
 
     //add wangjia
@@ -32,38 +33,48 @@ public class TestLimitUpAction {
 		if(stock!=null && stock.getDayStockList()!=null) {
 			for(DayStock dayStock :stock.getDayStockList()) {
 				int dayStockIndex = dayStock.getIndex();
-			 	if(!dayStock.getDate().startsWith("2014-12-04")){
+			 	if(!dayStock.getDate().startsWith("2014-11-17")){
 						continue;
 					}
 			 	// boolean isNewHigh = new FindLimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
-			 
-				  		boolean isNewHigh = new LimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
+			  	
+				  boolean isNewHigh = new BollService().checkBoll(stock, dayStock);
 			  		if(checkAll){
 			  			isNewHigh = true;
 			  		}
 				 		if( isNewHigh ) {
 							System.out.println("------------------------------------------");
 				  
-								double checkresult3 = 0;
-                                double checkresult1 = 0;
-                                double checkresultmaxprice = 0;
+								double checkresult5 = 0;
+                                double checkresult2 = 0;
 								
 								if(dayStock.getNextOneStock()!=null){ 
-									checkresult1 = dayStock.getNextOneStock().getRise();
-									checkresultmaxprice =  (dayStock.getNextOneStock().getMaxPrice()-dayStock.getClosePrice())/dayStock.getClosePrice();
+									checkresult2 = checkresult2 + dayStock.getNextOneStock().getRise();
+									checkresult5 = checkresult5 + dayStock.getNextOneStock().getRise();
 								}
 								if(stock.getDayStockByIndex(dayStockIndex+2)!=null){ 
-									checkresult3 = (stock.getDayStockByIndex(dayStockIndex+3).getClosePrice()-dayStock.getClosePrice())/dayStock.getClosePrice();
-									
+									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
+									checkresult2 = checkresult2 + stock.getDayStockByIndex(dayStockIndex+2).getRise();
 								}
+								if(stock.getDayStockByIndex(dayStockIndex+3)!=null){ 
+									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+3).getRise();
+								}
+								if(stock.getDayStockByIndex(dayStockIndex+4)!=null){ 
+									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+4).getRise();
+								}
+								if(stock.getDayStockByIndex(dayStockIndex+5)!=null){ 
+									checkresult5 = checkresult5 + stock.getDayStockByIndex(dayStockIndex+5).getRise();
+								} 
                                  
-                                if(checkresult1*100>2.5 || checkresultmaxprice>4 || checkresult3>5){
+                                if(checkresult2*100>3){
                                         checkResultSuccess++;
                                         DayStockService.getCheckInfo(stock,dayStock);
-                                        System.out.println("成功 " + MathUtil.format(checkresult1*100)+"%，max:"  + MathUtil.format(checkresultmaxprice*100)+"%" +"\t 3日："+ MathUtil.format(checkresult3*100)+"%");
-                                 }  else {
-                                	 
-                                 }
+                                        System.out.println("成功 2日" + MathUtil.format(checkresult2*100)+"%" +"\t 五日："+ MathUtil.format(checkresult5*100)+"%");
+                                 } else {
+                                        checkResultFail++;
+                                        DayStockService.getCheckInfo(stock,dayStock);
+                                        System.out.println("失败 2日"+ MathUtil.format(checkresult2*100)+"%" +"\t 五日："+ MathUtil.format(checkresult5*100)+"%");
+                                }
                                  
 						 		System.out.println("");
 								  m++;

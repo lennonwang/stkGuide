@@ -30,7 +30,7 @@ public class TestNewHighStrategyAction {
 		if(stock!=null && stock.getDayStockList()!=null) {
 			for(DayStock dayStock :stock.getDayStockList()) {
 				int dayStockIndex = dayStock.getIndex();
-			 	if(!dayStock.getDate().startsWith("2014-11-21")){
+			 	if(!dayStock.getDate().startsWith("2014-11-25")){
 						continue;
 					}
 		

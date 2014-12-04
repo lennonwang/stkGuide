@@ -134,9 +134,9 @@ public class CheckStockAction {
 		//   stock = ExportStock.exportStock("300001");
 		//   checkStockVol(stock);
 		  stock = BuildStockService.exportStock("002721");
-			 checkStockVol(stock);
+			 
 			 if(1==1){
-				// return ;
+				//  return ;
 			 }
 		int m = 0;
 		int n = 0;

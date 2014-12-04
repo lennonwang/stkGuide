@@ -1,4 +1,4 @@
-package com.sk.strategy;
+package com.sk.test;
 
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
@@ -14,12 +14,11 @@ import com.sk.service.DayStockService;
 6. 尽量调整3日、 macd和kdj都是依旧向上的；
 7. 概率较大的图形，有跳空缺口，且不补。 
 8. 涨停板是最后是突破筹码密集区；
-9. boll线最后开口，并且沿着boll逐步往上走
 使用范围：在震荡行情，或者上升行情中。
  * @author lennon
  *
  */
-public class LimitUpThreeDayStrategy {
+public class FindLimitUpThreeDayStrategy {
 
 	
 	 public   boolean conformLimitUpThreeDayStrategy (Stock stock,DayStock dayStock){
@@ -65,49 +64,16 @@ public class LimitUpThreeDayStrategy {
 	    		if(preThreeDayStock.getYesterdayStock()!=null ){
 	    			if( DayStockService.isLimitUp(preThreeDayStock.getYesterdayStock())) {
 	    				return false;
-	    			}
-	    			
-	    		}
-	    		//不能放量下跌
-    			if(preThreeDayStock.getNextOneStock()!=null && preThreeDayStock.getNextOneStock().getRiseRateDouble() < -0.01){
-    				if(preThreeDayStock.getNextOneStock().getVol()> preThreeDayStock.getVol()){
-    					return false;
-    				}
-    			} 
-    			//不能放量下跌
-    			if(dayStock.getYesterdayStock()!=null && dayStock.getYesterdayStock().getRiseRateDouble() < -0.01){
-    				if(dayStock.getYesterdayStock().getVol()> preThreeDayStock.getVol()){
-    					return false;
-    				}
-    			} 
-    			//不能放量下跌
-    			if( dayStock.getRiseRateDouble() < -0.01){
-    				if(dayStock.getVol()> preThreeDayStock.getVol()){
-    					return false;
-    				}
-    			}
-    			//调整期，没有大红柱
-	    		if(DayStockService.isBigRedStock(dayStock) || DayStockService.isBigRedStock(dayStock.getYesterdayStock()) 
-	    				|| DayStockService.isBigRedStock(preThreeDayStock.getNextOneStock())  ){
-	    			return false;
-	    		}
-	    		if(preThreeDayStock.getNextOneStock().getRiseRateDouble() 
-	    				+ preThreeDayStock.getNextOneStock().getNextOneStock().getRiseRateDouble()
-	    				+ dayStock.getRiseRateDouble()
-	    				>10){
-	    			return false;
-	    		}
-	    		//不能跌破涨停之前的价格
-	    		if(dayStock.getMinPrice() < preThreeDayStock.getMinPrice()){
+	    			} 
+	    		} 
+	    		//调整期，没有大红柱
+	    		if(  DayStockService.isLimitUp(dayStock.getYesterdayStock()) 
+	    				&& DayStockService.isLimitUp(preThreeDayStock.getNextOneStock())  ){
 	    			return false;
 	    		} 
-	    		//不能跌破5日线
-	    		if(dayStock.getClosePrice()  < dayStock.getDayStockMa().getPriceMa5() 
-	    			&& dayStock.getYesterdayStock().getClosePrice()  < dayStock.getDayStockMa().getPriceMa5()){
-	    		 	System.out.println("dayStock.getPriceMa5 =="+dayStock);
-	    		 	return false;
-	    		}
-	    		return true;
+	    		if(dayStock.getRiseRateDouble()>5 || dayStock.getMaxRiseRateDouble()>7){
+	    			return true;
+	    		} 
 	    	}
 	    	return false;
 	    	

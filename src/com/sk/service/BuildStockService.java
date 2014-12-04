@@ -81,8 +81,11 @@ public class BuildStockService {
 //				}
 //			}
 			String mKey = "m_"+DateUtil.getDate("yyyyMMdd")+stockId;
-			 MemcachedClient c= MemcachedManager.getInstance();  
-			 Stock stockFromCache = (Stock)c.get(mKey);
+			 MemcachedClient c= MemcachedManager.getInstance();
+            Stock stockFromCache = null;
+            if(c!=null){
+                stockFromCache = (Stock)c.get(mKey);
+            }
 			 if(stockFromCache!=null) {
 			//	 System.out.println("stock from memcache"+ stockFromCache);
 				 return stockFromCache;
@@ -130,8 +133,10 @@ public class BuildStockService {
 			stock.setDayStockList(dayStockList);
 			stock.setDayStockIndexMap(dayStockIndexMap);  
 			stock.setDayStockMap(dayStockMap); 
-			initStock(stock);  
+			initStock(stock);
+            if(c!=null){
 			 c.set(mKey, EXPIRE_FOUR_HOUR, stock);
+            }
 
 		 //	writeBuffered(stock,cacheFileName);
 			return stock;
@@ -193,6 +198,19 @@ public class BuildStockService {
 		} 
 		RsiService.countStockRsi(stock);
 		MacdService.countStockMacd(stock);
+        BollService.countStockBoll(stock);
+       new  KdjService().countStockKdj(stock);
 	}
-	 
+
+
+    public static void main(String[] args) {
+        Stock stock = null;
+        //	stock = ExportStock.exportStock("002066");
+        // stock = ExportStock.exportStock("SH601801");
+        //  stock = ExportStock.exportStock("SH600217");
+        //   stock = ExportStock.exportStock("300001");
+        //   checkStockVol(stock);
+        stock = BuildStockService.exportStock("002721");
+        System.out.println("stock");
+    }
 }

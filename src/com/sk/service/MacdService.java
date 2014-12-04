@@ -157,6 +157,23 @@ public class MacdService {
 			}
 		}
 	}
+	
+	public  static int getMacdRedDayNumber(Stock stock,DayStock dayStock){
+		DayStockIndexMacd macdIndex = dayStock.getDayStockIndexMacd();
+		if(macdIndex==null){
+			return 0;
+		}
+		if(macdIndex.getMacd() < -0.02){
+			return -1;
+		}
+		for(int i=1;i<100;i++){
+			DayStock yDayStockItem = stock.getDayStockByIndex(dayStock.getIndex()-i);
+			if(yDayStockItem.getDayStockIndexMacd()!=null && yDayStockItem.getDayStockIndexMacd().getMacd()<-0.02){
+				return i;
+			}
+		}
+		return 0;
+	}
 	 
 	
 	public static void main(String[] args) {
