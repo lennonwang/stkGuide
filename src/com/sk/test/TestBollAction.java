@@ -38,7 +38,7 @@ public class TestBollAction {
 					}
 			 	// boolean isNewHigh = new FindLimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
 			  	
-				  boolean isNewHigh = new BollService().checkBoll(stock, dayStock);
+				  boolean isNewHigh = new BollService().checkBollOpenMouth(stock, dayStock);
 			  		if(checkAll){
 			  			isNewHigh = true;
 			  		}

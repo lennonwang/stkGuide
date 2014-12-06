@@ -1,12 +1,15 @@
 package com.sk.service;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.sk.bean.DayStock;
 import com.sk.bean.Stock;
+import com.sk.config.Config;
 import com.sk.util.MaUtil;
 import com.sk.util.MathUtil;
 
@@ -53,10 +56,20 @@ public class BollService {
                       double boll = MathUtil.format(dayStock.getYesterdayStock().getDayStockIndex().getBollMid() );
                       double upper= MathUtil.format(boll + 2* dayStock.getYesterdayStock().getDayStockIndex().getBollVart3() ); 
                       double lower= MathUtil.format(boll - 2* dayStock.getYesterdayStock().getDayStockIndex().getBollVart3() ) ; 
-                    //  double lower  = mid - 2*vart3;
+                   
+                      double nextBoll = MathUtil.format(dayStock.getDayStockIndex().getBollMid() );
+                      double nextUpper= MathUtil.format(nextBoll + 2* dayStock.getDayStockIndex().getBollVart3() ); 
+                      double nextLower= MathUtil.format(nextBoll - 2* dayStock.getDayStockIndex().getBollVart3() ) ; 
+                   
+                      //  double lower  = mid - 2*vart3;
                       dayStock.getDayStockIndex().setBollUpper(upper);
                       dayStock.getDayStockIndex().setBollLower(lower);
                       dayStock.getDayStockIndex().setBoll(boll);
+                      
+
+                      dayStock.getDayStockIndex().setNextBollUpper(nextUpper);
+                      dayStock.getDayStockIndex().setNextBollLower(nextLower);
+                      dayStock.getDayStockIndex().setNextBoll(nextBoll);
                //      System.out.println("boll upper="+upper+"\t var3="+
                //     		 MathUtil.format( vart3 ) +"\t"+DayStockService.getDayStockInfo(dayStock));
                   }
@@ -70,14 +83,28 @@ public class BollService {
 	 * @param dayStock
 	 * @return
 	 */
-	public  boolean checkBoll(Stock stock,DayStock dayStock){ 
-		int dayStockIndex = dayStock.getIndex();
-		double currentBollVart3 = dayStock.getDayStockIndex().getBollVart3();
-		if(dayStock.getYesterdayStock()==null){
+	public  boolean checkBollOpenMouth(Stock stock,DayStock dayStock){ 
+		if(dayStock.getDayStockIndex().getBoll()<= 0){
 			return false;
 		}
+		double currentBollVart3 = dayStock.getDayStockIndex().getBollVart3();
+		double currentRise =100d * (dayStock.getDayStockIndex().getBollUpper() 
+				-  dayStock.getDayStockIndex().getBoll())/ dayStock.getDayStockIndex().getBoll();
+		if(dayStock.getYesterdayStock()==null){
+			return false;
+		} 
+		double yesterdayRise =100d * (dayStock.getYesterdayStock().getDayStockIndex().getBollUpper() 
+				-  dayStock.getYesterdayStock().getDayStockIndex().getBoll())/ dayStock.getDayStockIndex().getBoll();
+		
+		double nextRise =100d * (dayStock.getNextOneStock().getDayStockIndex().getBollUpper() 
+				-  dayStock.getNextOneStock().getDayStockIndex().getBoll())/ dayStock.getNextOneStock().getDayStockIndex().getBoll();
+		
 		double yesterdayBollVart3 = dayStock.getYesterdayStock().getDayStockIndex().getBollVart3();
-		if(currentBollVart3/yesterdayBollVart3>1.3){
+	//	System.out.println("currentRise="+ MathUtil.format( currentRise ) +"\t yesterdayRise="+  MathUtil.format( yesterdayRise) 
+//				 +"\t nextRise="+  MathUtil.format( nextRise));
+	//	System.out.println("dayStock="+ DayStockService.getDayStockInfo(dayStock) );
+		
+		if(nextRise/yesterdayRise>1.3){
 			return true;
 		}
 		return false;
@@ -88,10 +115,25 @@ public class BollService {
 		Stock stock = null;
 		//	stock = ExportStock.exportStock("002066");
 		  // stock = ExportStock.exportStock("SH601801");
-		 //  stock = BuildStockService.exportStock("SH600217");
-		   stock = BuildStockService.exportStock("600415");
+		 //  stock = BuildStockService.exportStock("SH600217"); 
 		//   checkStockVol(stock); 
-		  countStockBoll(stock);
+		   
+			File file = new File(Config.stockFilePath);
+			String test[];
+			test = file.list();
+			for (int i = 0; i < test.length; i++) { 
+				stock = BuildStockService.exportStock(test[i]); 
+				if(stock!=null) {
+					for(DayStock dayStock :stock.getDayStockList()) {
+						int dayStockIndex = dayStock.getIndex();
+						if(!dayStock.getDate().startsWith("2014-12-05")){
+							continue;
+						}
+						 new BollService().checkBollOpenMouth(stock,dayStock);
+					}
+				}
+			}
+			
 		//  MaUtil.emaStockClose(stock, 2);
 	}
 }

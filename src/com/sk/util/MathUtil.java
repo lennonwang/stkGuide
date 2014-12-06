@@ -23,7 +23,7 @@ public class MathUtil {
      * 在中间计算过程中，尽量不用format，只在最后展示时，显示format
      * 使用DecimalFormat,保留小数点后两位 
      */  
-    public static double format(double value) {   
+    public static double format(double value) {    
         df.setRoundingMode(RoundingMode.HALF_UP);  
         String s=  df.format(value);  
         return Double.parseDouble(s);

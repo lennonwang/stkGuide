@@ -32,6 +32,10 @@ public class DayStockIndex implements Serializable {
     private double boll;
     private double bollUpper;
     private double bollLower;
+    
+    private double nextBoll;
+    private double nextBollUpper;
+    private double nextBollLower;
 	
 	/*
 	 * RSV:=(CLOSE-LLV(LOW,N))/(HHV(HIGH,N)-LLV(LOW,N))*100;
@@ -214,6 +218,42 @@ J:3*K-2*D;
 
 	public void setKdjJ(double kdjJ) {
 		this.kdjJ = kdjJ;
+	}
+
+
+
+	public double getNextBoll() {
+		return nextBoll;
+	}
+
+
+
+	public void setNextBoll(double nextBoll) {
+		this.nextBoll = nextBoll;
+	}
+
+
+
+	public double getNextBollUpper() {
+		return nextBollUpper;
+	}
+
+
+
+	public void setNextBollUpper(double nextBollUpper) {
+		this.nextBollUpper = nextBollUpper;
+	}
+
+
+
+	public double getNextBollLower() {
+		return nextBollLower;
+	}
+
+
+
+	public void setNextBollLower(double nextBollLower) {
+		this.nextBollLower = nextBollLower;
 	}
 
 

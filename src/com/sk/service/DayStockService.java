@@ -14,6 +14,7 @@ public class DayStockService {
 	public static void getCheckInfo(Stock stock, DayStock dayStock){
 			int dayStockIndex= dayStock.getIndex();
 			System.out.println();
+			System.out.println("前五天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-5)));
 			System.out.println("前四天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-4)));
 			System.out.println("前三天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-3)));
 			System.out.println("前两天:"+DayStockService.getDayStockInfo(stock.getDayStockByIndex(dayStockIndex-2)));
@@ -45,7 +46,17 @@ public class DayStockService {
                 s = s + "\t rsi:"+dayStock.getDayStockIndex().getRsi6() ;
             }
             if(dayStock.getDayStockIndex()!=null){
-          //      s = s + "\t bollUp:"+dayStock.getDayStockIndex().getBollUpper() ;
+            	double currentRise =0d; 
+            	if(dayStock.getDayStockIndex().getBoll()>0){
+            		currentRise = 100d * (dayStock.getDayStockIndex().getBollUpper() 
+        				-  dayStock.getDayStockIndex().getBoll())/ dayStock.getDayStockIndex().getBoll();
+            	}
+            	double nextRise =0d;
+            	if( dayStock.getDayStockIndex().getNextBoll()>0){
+            		nextRise = 100d * (dayStock.getDayStockIndex().getNextBollUpper() 
+        				-  dayStock.getDayStockIndex().getNextBoll())/ dayStock.getDayStockIndex().getNextBoll();
+            	} 
+            	s = s + "\t bollRise:"+ MathUtil.format( currentRise ) +","+  MathUtil.format( nextRise );
             }
 			if(dayStock.getDayStockIndexMacd()!=null){
 				s = s + "\t macd("+dayStock.getDayStockIndexMacd().getMacdDiff()+","+dayStock.getDayStockIndexMacd().getMacdDea()
@@ -95,6 +106,23 @@ public class DayStockService {
 		}
 		return false;
 	}
+	
+	/**
+	 * 判断是否是红十字星
+	 * @param dayStock
+	 * @return
+	 */
+	public static boolean isRedStarStock(DayStock dayStock){ 
+		if(  dayStock!=null && dayStock.getMaxPrice()>dayStock.getClosePrice() && dayStock.getMinPrice()<dayStock.getClosePrice()
+				&&  (dayStock.getMaxPrice()-dayStock.getClosePrice() ) > (dayStock.getClosePrice()-dayStock.getOpenPrice()) 
+			){ 
+			if(dayStock.getYesterdayStock()!=null && dayStock.getClosePrice()>dayStock.getYesterdayStock().getClosePrice()){ 
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	public static boolean checkRiseForVolBig(Stock stock,DayStock dayStock){   
 		DayStock preStock = dayStock.getYesterdayStock();  

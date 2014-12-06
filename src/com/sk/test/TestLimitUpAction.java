@@ -32,18 +32,19 @@ public class TestLimitUpAction {
 		if(stock!=null && stock.getDayStockList()!=null) {
 			for(DayStock dayStock :stock.getDayStockList()) {
 				int dayStockIndex = dayStock.getIndex();
-			 	if(!dayStock.getDate().startsWith("2014-12-04")){
-						continue;
-					}
+				if(!dayStock.getDate().startsWith("2014-11-21")){
+					continue;
+				}
+				if(!dayStock.getId().contains("300377")){
+					 // continue;
+				}
 			 	// boolean isNewHigh = new FindLimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
 			 
-				  		boolean isNewHigh = new LimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
-			  		if(checkAll){
-			  			isNewHigh = true;
-			  		}
-				 		if( isNewHigh ) {
+				  		int checkValue = new LimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
+			  	 
+				 		if( checkValue>=55 ) {
 							System.out.println("------------------------------------------");
-				  
+							System.out.println("checkValue="+checkValue);
 								double checkresult3 = 0;
                                 double checkresult1 = 0;
                                 double checkresultmaxprice = 0;
@@ -57,12 +58,12 @@ public class TestLimitUpAction {
 									
 								}
                                  
-                                if(checkresult1*100>2.5 || checkresultmaxprice>4 || checkresult3>5){
+                                if(checkresult1*100>2.5 || checkresultmaxprice *100 >4 || checkresult3 *100 >5){
                                         checkResultSuccess++;
                                         DayStockService.getCheckInfo(stock,dayStock);
                                         System.out.println("成功 " + MathUtil.format(checkresult1*100)+"%，max:"  + MathUtil.format(checkresultmaxprice*100)+"%" +"\t 3日："+ MathUtil.format(checkresult3*100)+"%");
                                  }  else {
-                                	 
+                                        DayStockService.getCheckInfo(stock,dayStock);
                                  }
                                  
 						 		System.out.println("");
