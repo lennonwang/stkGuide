@@ -11,6 +11,8 @@ import com.sk.util.MathUtil;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestLimitUpAction {
  
@@ -32,7 +34,7 @@ public class TestLimitUpAction {
 		if(stock!=null && stock.getDayStockList()!=null) {
 			for(DayStock dayStock :stock.getDayStockList()) {
 				int dayStockIndex = dayStock.getIndex();
-				if(!dayStock.getDate().startsWith("2014-11-21")){
+				if(!dayStock.getDate().startsWith("2014-12-16")){
 					continue;
 				}
 				if(!dayStock.getId().contains("300377")){
@@ -42,7 +44,7 @@ public class TestLimitUpAction {
 			 
 				  		int checkValue = new LimitUpThreeDayStrategy().conformLimitUpThreeDayStrategy(stock, dayStock);
 			  	 
-				 		if( checkValue>=55 ) {
+				 		if( checkValue>=60 ) {
 							System.out.println("------------------------------------------");
 							System.out.println("checkValue="+checkValue);
 								double checkresult3 = 0;
@@ -77,6 +79,8 @@ public class TestLimitUpAction {
 		return m;
 	}
 	public static void main(String[] args) {
+		
+		
 		Stock stock = null;
 		  stock = BuildStockService.exportStock("002721");
 
@@ -89,9 +93,9 @@ public class TestLimitUpAction {
 		for (int i = 0; i < test.length; i++) { 
 			stock = BuildStockService.exportStock(test[i]); 
 			if (stock != null) {
-				m++;
+				m++; 
 				int c = checkStrategy(stock,false);
-				 n = n+c;
+				n = n+c;
 			}  
 		}
 		long ctime1 =  new Date().getTime();
@@ -101,5 +105,6 @@ public class TestLimitUpAction {
 		System.out.println("check "+m+"支，共计"+n+"支符合"+"\t "+checkResultSuccess+"成功，"
 		+checkResultFail+"失败；成功率="+MathUtil.format((checkResultSuccess*100d/n))+"%");
 		 
-	}
+		
+	} 
 }
